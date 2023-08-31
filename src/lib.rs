@@ -16,21 +16,17 @@
 
 mod aerials;
 mod grounded;
-//mod param;
 mod script;
 mod specials;
 mod specials2;
 mod throws;
-//mod finalsmash;
 
 #[skyline::main(name = "smashline_test")]
 pub fn main() {
     aerials::install();
 	grounded::install();
-	//param::install();
 	script::install();
 	specials::install();
 	specials2::install();
 	throws::install();
-	//finalsmash::install();
 }
