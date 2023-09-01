@@ -94,7 +94,7 @@ unsafe fn zelda_game_speciallw(agent: &mut L2CAgentBase) {
 	frame(agent.lua_state_agent, 6.0);
     if macros::is_excute(agent) {
 		WorkModule::on_flag(agent.module_accessor, FIGHTER_ZELDA_INSTANCE_WORK_ID_FLAG_SEARCH_HIT);
-        macros::ATTACK(agent, 0, 0, Hash40::new("top"), 0.0, 361, 0, 0, 0, 2.8, 0.0, 9.0, 4.0, Some(0.0), Some(9.0), Some(8.2), 0.0, 0.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_POS, false, 0, 0.0, 0, false, false, false, false, false, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_FIGHTER, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_none"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_NONE);
+        macros::ATTACK(agent, 0, 0, Hash40::new("top"), 0.0, 361, 0, 0, 0, 2.8, 0.0, 9.0, 4.0, Some(0.0), Some(9.0), Some(14.2), 0.0, 0.0, *ATTACK_SETOFF_KIND_OFF, *ATTACK_LR_CHECK_POS, false, 0, 0.0, 0, false, false, false, false, false, *COLLISION_SITUATION_MASK_GA, *COLLISION_CATEGORY_MASK_FIGHTER, *COLLISION_PART_MASK_ALL, false, Hash40::new("collision_attr_none"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_NONE);
 	}
 	frame(agent.lua_state_agent, 9.0);
     if macros::is_excute(agent) {
