@@ -1,14 +1,15 @@
-use smash::hash40;
-use smash::phx::Hash40;
-use smash::lib::lua_const::*;
-use smash::app::*;
-use smash::app::lua_bind::*;
-use smash::lua2cpp::L2CAgentBase;
-use smash::lua2cpp::L2CFighterBase;
-use smash::lua2cpp::{L2CFighterCommon};
-use smash::lib::{lua_const::*, L2CValue};
-use smashline::*;
-use smash_script::*;
+use {
+    smash::{
+        lua2cpp::*,
+        phx::*,
+        app::{sv_animcmd::*, lua_bind::*, *},
+        lib::lua_const::*,
+		hash40
+    },
+    smash_script::*,
+    smashline::*
+};
+use smash::lib::L2CValue;
 
 #[status_script(agent = "zelda", status = FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_MAIN)]
 unsafe fn zelda_speciallw_main(fighter: &mut L2CFighterCommon) -> L2CValue {
@@ -112,14 +113,15 @@ unsafe extern "C" fn zelda_speciallw_main_loop(fighter: &mut L2CFighterCommon) -
 		}
 		//LAB_7100009430:
 	}
+	if MotionModule::is_end(fighter.module_accessor) {
+		if fighter.global_table[0x16] != *SITUATION_KIND_GROUND {
+			fighter.change_status(FIGHTER_STATUS_KIND_FALL.into(), false.into());
+		} else {
+			fighter.change_status(FIGHTER_STATUS_KIND_WAIT.into(), false.into());
+		}
+	}
 	return 0.into();
 }
-
-#[status_script(agent = "zelda", status = FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_EXEC_STATUS)]
-unsafe extern "C" fn zelda_speciallw_exec(fighter: &mut L2CFighterCommon) -> L2CValue {
-    return 0.into();
-}
-
 
 #[status_script(agent = "zelda", status = FIGHTER_STATUS_KIND_SPECIAL_LW, condition = LUA_SCRIPT_STATUS_FUNC_STATUS_PRE)]
 unsafe extern "C" fn zelda_speciallw_pre(fighter: &mut L2CFighterCommon) -> L2CValue {
@@ -149,7 +151,6 @@ unsafe extern "C" fn zelda_speciallw_pre(fighter: &mut L2CFighterCommon) -> L2CV
 pub fn install() {
 	install_status_scripts!(
 	  zelda_speciallw_main,
-	  zelda_speciallw_exec,
 	  zelda_speciallw_pre,
 	);
 }
