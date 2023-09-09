@@ -108,6 +108,8 @@ unsafe fn zelda_dein_move_main(weapon: &mut L2CWeaponCommon) -> L2CValue {
 	let owner_boma = &mut *sv_battle_object::module_accessor((WorkModule::get_int(weapon.module_accessor, *WEAPON_INSTANCE_WORK_ID_INT_LINK_OWNER)) as u32);
 	if !WorkModule::is_flag(owner_boma, FIGHTER_ZELDA_WORK_FLAG_SPECIAL_S_REPLACE) {
 		WorkModule::on_flag(owner_boma, FIGHTER_ZELDA_WORK_FLAG_SPECIAL_S_UNAVAILABLE);
+		let o_entry_id = WorkModule::get_int(owner_boma, *FIGHTER_INSTANCE_WORK_ID_INT_ENTRY_ID) as usize;
+		s_cooldown[o_entry_id] = 600.0;
 		WorkModule::on_flag(weapon.module_accessor, WEAPON_ZELDA_DEIN_INSTANCE_WORK_ID_FLAG_LOCK_TYPE);
 		WorkModule::set_float(weapon.module_accessor, 120.0, *WEAPON_ZELDA_DEIN_STATUS_WORK_FLOAT_LIFE);
 	} else {
@@ -127,7 +129,6 @@ unsafe extern "C" fn zelda_dein_move_main_loop(weapon: &mut L2CWeaponCommon) -> 
 		}
 		return 0.into();
 	}
-	let owner_boma = &mut *sv_battle_object::module_accessor((WorkModule::get_int(weapon.module_accessor, *WEAPON_INSTANCE_WORK_ID_INT_LINK_OWNER)) as u32);
 	weapon.change_status(WEAPON_ZELDA_DEIN_STATUS_KIND_TAME.into(), false.into());
 	return 0.into();
 }
@@ -142,10 +143,8 @@ unsafe fn zelda_game_specialsstart(agent: &mut L2CAgentBase) {
 				WorkModule::on_flag(agent.module_accessor, *FIGHTER_ZELDA_STATUS_SPECIAL_S_FLAG_1);
 			}
 		} else {
-			if !WorkModule::is_flag(agent.module_accessor, FIGHTER_ZELDA_WORK_FLAG_SPECIAL_N_UNAVAILABLE) {
-				// This flag allows the projectile to be summoned
-				WorkModule::on_flag(agent.module_accessor, *FIGHTER_ZELDA_STATUS_SPECIAL_S_FLAG_1);
-			}
+			// This flag allows the projectile to be summoned
+			WorkModule::on_flag(agent.module_accessor, *FIGHTER_ZELDA_STATUS_SPECIAL_S_FLAG_1);
 		}
 	}
 	frame(agent.lua_state_agent, 14.0);
@@ -234,8 +233,10 @@ fn zelda_frame(fighter: &mut L2CFighterCommon) {
 		if WorkModule::is_flag(fighter.module_accessor, FIGHTER_ZELDA_WORK_FLAG_SPECIAL_S_UNAVAILABLE) {
 			s_cooldown[entry_id] = s_cooldown[entry_id] - 1.0;
 			if s_cooldown[entry_id] <= 0.0 {
-				s_cooldown[entry_id] = 180.0;
+				s_cooldown[entry_id] = 600.0;
 				WorkModule::off_flag(fighter.module_accessor, FIGHTER_ZELDA_WORK_FLAG_SPECIAL_S_UNAVAILABLE);
+				macros::EFFECT(fighter, Hash40::new("sys_damage_aura"), Hash40::new("hip"), 0, 0, 0, 0, 0, 0, 2.4, 0, 0, 0, 0, 0, 0, true);
+				macros::PLAY_SE(fighter, Hash40::new("se_common_elec_l_damage"));
 			}
 		}
 		if WorkModule::is_flag(fighter.module_accessor, FIGHTER_ZELDA_WORK_FLAG_SPECIAL_N_UNAVAILABLE) {
@@ -245,7 +246,6 @@ fn zelda_frame(fighter: &mut L2CFighterCommon) {
 				WorkModule::off_flag(fighter.module_accessor, FIGHTER_ZELDA_WORK_FLAG_SPECIAL_N_UNAVAILABLE);
 			}
 		}
-		
 		
 	}
 }
