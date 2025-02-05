@@ -1,17 +1,6 @@
-use {
-    smash::{
-        lua2cpp::*,
-        phx::*,
-        app::{sv_animcmd::*, lua_bind::*, *},
-        lib::lua_const::*,
-		hash40
-    },
-    smash_script::*,
-    smashline::*
-};
+use super::*;
 
-#[acmd_script( agent = "zelda", script = "game_throwf", category = ACMD_GAME, low_priority )]
-unsafe fn zelda_game_throwf(agent: &mut L2CAgentBase) {
+unsafe extern "C" fn zelda_game_throwf(agent: &mut L2CAgentBase) {
     if macros::is_excute(agent) {
         macros::ATTACK_ABS(agent, *FIGHTER_ATTACK_ABSOLUTE_KIND_THROW, 0, 4.0, 33, 75, 0, 58, 0.0, 1.0, *ATTACK_LR_CHECK_F, 0.0, true, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_THROW);
         macros::ATTACK_ABS(agent, *FIGHTER_ATTACK_ABSOLUTE_KIND_CATCH, 0, 3.0, 361, 100, 0, 60, 0.0, 1.0, *ATTACK_LR_CHECK_F, 0.0, true, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_THROW);
@@ -34,8 +23,7 @@ unsafe fn zelda_game_throwf(agent: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "zelda", script = "effect_throwf", category = ACMD_EFFECT, low_priority )]
-unsafe fn zelda_effect_throwf(agent: &mut L2CAgentBase) {
+unsafe extern "C" fn zelda_effect_throwf(agent: &mut L2CAgentBase) {
     frame(agent.lua_state_agent, 7.0);
     if macros::is_excute(agent) {
         macros::EFFECT(agent, Hash40::new("sys_attack_line"), Hash40::new("top"), 0, 8.5, -5, -15, 5, 0, 0.9, 0, 0, 0, 0, 0, 0, true);
@@ -51,8 +39,37 @@ unsafe fn zelda_effect_throwf(agent: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "zelda", script = "game_throwb", category = ACMD_GAME, low_priority )]
-unsafe fn zelda_game_throwb(agent: &mut L2CAgentBase) {
+unsafe extern "C" fn zelda_sound_throwf(agent: &mut L2CAgentBase) {
+    frame(agent.lua_state_agent, 2.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SE(agent, Hash40::new("se_common_throw_01"));
+    }
+    frame(agent.lua_state_agent, 11.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SE(agent, Hash40::new("se_zelda_attack100"));
+    }
+    frame(agent.lua_state_agent, 13.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SEQUENCE(agent, Hash40::new("seq_zelda_rnd_attack"));
+        macros::PLAY_SE(agent, Hash40::new("se_zelda_attack100end"));
+    }
+    frame(agent.lua_state_agent, 14.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SE(agent, Hash40::new("se_zelda_attackhard_l01"));
+    }
+}
+
+unsafe extern "C" fn zelda_expression_throwf(agent: &mut L2CAgentBase) {
+    if macros::is_excute(agent) {
+        slope!(agent, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(agent.lua_state_agent, 12.0);
+    if macros::is_excute(agent) {
+        ControlModule::set_rumble(agent.module_accessor, Hash40::new("rbkind_attackm"), 6, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+}
+
+unsafe extern "C" fn zelda_game_throwb(agent: &mut L2CAgentBase) {
     if macros::is_excute(agent) {
         macros::ATTACK_ABS(agent, *FIGHTER_ATTACK_ABSOLUTE_KIND_THROW, 0, 11.0, 52, 60, 0, 85, 0.0, 1.0, *ATTACK_LR_CHECK_F, 0.0, true, Hash40::new("collision_attr_magic"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_THROW);
         macros::ATTACK_ABS(agent, *FIGHTER_ATTACK_ABSOLUTE_KIND_CATCH, 0, 3.0, 361, 100, 0, 40, 0.0, 1.0, *ATTACK_LR_CHECK_F, 0.0, true, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_THROW);
@@ -74,8 +91,7 @@ unsafe fn zelda_game_throwb(agent: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "zelda", script = "effect_throwb", category = ACMD_EFFECT, low_priority )]
-unsafe fn zelda_effect_throwb(agent: &mut L2CAgentBase) {
+unsafe extern "C" fn zelda_effect_throwb(agent: &mut L2CAgentBase) {
     if macros::is_excute(agent) {
         macros::EFFECT(agent, Hash40::new("reflet_catch_hand"), Hash40::new("throw"), 0, 0, -3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, true);
     }
@@ -94,8 +110,34 @@ unsafe fn zelda_effect_throwb(agent: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "zelda", script = "game_throwhi", category = ACMD_GAME, low_priority )]
-unsafe fn zelda_game_throwhi(agent: &mut L2CAgentBase) {
+unsafe extern "C" fn zelda_sound_throwb(agent: &mut L2CAgentBase) {
+    frame(agent.lua_state_agent, 5.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SE(agent, Hash40::new("se_common_throw_01"));
+    }
+    wait(agent.lua_state_agent, 13.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SE(agent, Hash40::new("se_common_throw_02"));
+        macros::PLAY_SEQUENCE(agent, Hash40::new("seq_zelda_rnd_attack"));
+    }
+}
+
+unsafe extern "C" fn zelda_expression_throwb(agent: &mut L2CAgentBase) {
+    if macros::is_excute(agent) {
+        slope!(agent, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_R);
+    }
+    frame(agent.lua_state_agent, 25.0);
+    if macros::is_excute(agent) {
+        macros::QUAKE(agent, *CAMERA_QUAKE_KIND_M);
+        ControlModule::set_rumble(agent.module_accessor, Hash40::new("rbkind_attackm"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+    frame(agent.lua_state_agent, 40.0);
+    if macros::is_excute(agent) {
+        slope!(agent, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_LR, 2);
+    }
+}
+
+unsafe extern "C" fn zelda_game_throwhi(agent: &mut L2CAgentBase) {
     if macros::is_excute(agent) {
         macros::ATTACK_ABS(agent, *FIGHTER_ATTACK_ABSOLUTE_KIND_THROW, 0, 4.5, 84, 88, 0, 60, 0.0, 1.0, *ATTACK_LR_CHECK_F, 0.0, true, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_THROW);
         macros::ATTACK_ABS(agent, *FIGHTER_ATTACK_ABSOLUTE_KIND_CATCH, 0, 3.0, 361, 100, 0, 40, 0.0, 1.0, *ATTACK_LR_CHECK_F, 0.0, true, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_THROW);
@@ -122,8 +164,7 @@ unsafe fn zelda_game_throwhi(agent: &mut L2CAgentBase) {
     macros::FT_MOTION_RATE(agent, 0.8);
 }
 
-#[acmd_script( agent = "zelda", script = "effect_throwhi", category = ACMD_EFFECT, low_priority )]
-unsafe fn zelda_effect_throwhi(agent: &mut L2CAgentBase) {
+unsafe extern "C" fn zelda_effect_throwhi(agent: &mut L2CAgentBase) {
     frame(agent.lua_state_agent, 5.0);
     if macros::is_excute(agent) {
         macros::FOOT_EFFECT(agent, Hash40::new("sys_run_smoke"), Hash40::new("top"), 0, 0, 0, 0, 0, 0, 1.5, 0, 0, 0, 0, 0, 0, false);
@@ -144,8 +185,32 @@ unsafe fn zelda_effect_throwhi(agent: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "zelda", script = "game_throwlw", category = ACMD_GAME, low_priority )]
-unsafe fn zelda_game_throwlw(agent: &mut L2CAgentBase) {
+unsafe extern "C" fn zelda_sound_throwhi(agent: &mut L2CAgentBase) {
+    frame(agent.lua_state_agent, 2.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SEQUENCE(agent, Hash40::new("seq_zelda_rnd_attack"));
+    }
+    frame(agent.lua_state_agent, 4.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SE(agent, Hash40::new("se_zelda_attackhard_s01"));
+    }
+}
+
+unsafe extern "C" fn zelda_expression_throwhi(agent: &mut L2CAgentBase) {
+    if macros::is_excute(agent) {
+        agent.clear_lua_stack();
+        lua_args!(agent, FIGHTER_ATTACK_ABSOLUTE_KIND_THROW, CAMERA_QUAKE_KIND_NONE);
+        FT_ATTACK_ABS_CAMERA_QUAKE(agent.lua_state_agent);
+        slope!(agent, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(agent.lua_state_agent, 9.0);
+    if macros::is_excute(agent) {
+        macros::RUMBLE_HIT(agent, Hash40::new("rbkind_attackm"), 0);
+        macros::QUAKE(agent, *CAMERA_QUAKE_KIND_M);
+    }
+}
+
+unsafe extern "C" fn zelda_game_throwlw(agent: &mut L2CAgentBase) {
     if macros::is_excute(agent) {
         macros::ATTACK_ABS(agent, *FIGHTER_ATTACK_ABSOLUTE_KIND_THROW, 0, 5.0, 73, 30, 0, 90, 0.0, 1.0, *ATTACK_LR_CHECK_F, 0.0, true, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_THROW);
         macros::ATTACK_ABS(agent, *FIGHTER_ATTACK_ABSOLUTE_KIND_CATCH, 0, 3.0, 361, 100, 0, 60, 0.0, 1.0, *ATTACK_LR_CHECK_F, 0.0, true, Hash40::new("collision_attr_normal"), *ATTACK_SOUND_LEVEL_S, *COLLISION_SOUND_ATTR_NONE, *ATTACK_REGION_THROW);
@@ -167,8 +232,7 @@ unsafe fn zelda_game_throwlw(agent: &mut L2CAgentBase) {
     }
 }
 
-#[acmd_script( agent = "zelda", script = "effect_throwlw", category = ACMD_EFFECT, low_priority )]
-unsafe fn zelda_effect_throwlw(agent: &mut L2CAgentBase) {
+unsafe extern "C" fn zelda_effect_throwlw(agent: &mut L2CAgentBase) {
     frame(agent.lua_state_agent, 4.0);
     if macros::is_excute(agent) {
         macros::FOOT_EFFECT(agent, Hash40::new("sys_matchless_smoke1"), Hash40::new("top"), 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, false);
@@ -188,15 +252,54 @@ unsafe fn zelda_effect_throwlw(agent: &mut L2CAgentBase) {
     }
 }
 
+unsafe extern "C" fn zelda_sound_throwlw(agent: &mut L2CAgentBase) {
+    frame(agent.lua_state_agent, 2.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_SE(agent, Hash40::new("se_common_throw_01"));
+    }
+    wait(agent.lua_state_agent, 18.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_DOWN_SE(agent, Hash40::new("se_common_throw_03"));
+        macros::PLAY_SEQUENCE(agent, Hash40::new("seq_zelda_rnd_attack"));
+    }
+    wait(agent.lua_state_agent, 4.0);
+    if macros::is_excute(agent) {
+        macros::PLAY_DOWN_SE(agent, Hash40::new("se_common_down_m_01"));
+        macros::PLAY_SE(agent, Hash40::new("se_common_kick_hit_m"));
+    }
+}
+
+unsafe extern "C" fn zelda_expression_throwlw(agent: &mut L2CAgentBase) {
+    if macros::is_excute(agent) {
+        agent.clear_lua_stack();
+        lua_args!(agent, FIGHTER_ATTACK_ABSOLUTE_KIND_THROW, CAMERA_QUAKE_KIND_NONE);
+        FT_ATTACK_ABS_CAMERA_QUAKE(agent.lua_state_agent);
+        slope!(agent, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+    }
+    frame(agent.lua_state_agent, 24.0);
+    if macros::is_excute(agent) {
+        macros::QUAKE(agent, *CAMERA_QUAKE_KIND_M);
+        ControlModule::set_rumble(agent.module_accessor, Hash40::new("rbkind_attackm"), 0, false, *BATTLE_OBJECT_ID_INVALID as u32);
+    }
+}
+
 pub fn install() {
-    smashline::install_acmd_scripts!(
-		zelda_effect_throwb,
-		zelda_effect_throwf,
-		zelda_effect_throwhi,
-		zelda_effect_throwlw,
-		zelda_game_throwb,
-		zelda_game_throwf,
-		zelda_game_throwhi,
-		zelda_game_throwlw,
-    );
+    Agent::new("zelda")
+        .game_acmd("game_throwf_phosphora", zelda_game_throwf, Default)
+        .effect_acmd("effect_throwf_phosphora", zelda_effect_throwf, Default)
+        .sound_acmd("sound_throwf_phosphora", zelda_sound_throwf, Default)
+        .expression_acmd("expression_throwf_phosphora", zelda_expression_throwf, Default)
+        .game_acmd("game_throwb_phosphora", zelda_game_throwb, Default)
+        .effect_acmd("effect_throwb_phosphora", zelda_effect_throwb, Default)
+        .sound_acmd("sound_throwb_phosphora", zelda_sound_throwb, Default)
+        .expression_acmd("expression_throwb_phosphora", zelda_expression_throwb, Default)
+        .game_acmd("game_throwhi_phosphora", zelda_game_throwhi, Default)
+        .effect_acmd("effect_throwhi_phosphora", zelda_effect_throwhi, Default)
+        .sound_acmd("sound_throwhi_phosphora", zelda_sound_throwhi, Default)
+        .expression_acmd("expression_throwhi_phosphora", zelda_expression_throwhi, Default)
+        .game_acmd("game_throwlw_phosphora", zelda_game_throwlw, Default)
+        .effect_acmd("effect_throwlw_phosphora", zelda_effect_throwlw, Default)
+        .sound_acmd("sound_throwlw_phosphora", zelda_sound_throwlw, Default)
+        .expression_acmd("expression_throwlw_phosphora", zelda_expression_throwlw, Default)
+        .install();
 }

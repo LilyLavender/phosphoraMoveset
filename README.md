@@ -1,6 +1,4 @@
 # Phosphora Moveset
-Source code for the Phosphora moveset for Smash Ultimate
+Source code for the [SSBU Phosphora Moveset mod](https://gamebanana.com/mods/471696)
 
-Pretty disorganized, sorry 'bout that
-
-Any questions, please message me on discord at @LilyLambda
+Any questions? Dm me on Discord @LilyLambda
